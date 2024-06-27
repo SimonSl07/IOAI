@@ -1,0 +1,11 @@
+Sunt comune situatiile in care clasele nu sunt balansate la antrenare (e.g. 90% sunt din clasa 0 si 10% din clasa 1), in special la datele din domeniul medical. De aici vine si rezultatul obtinut de tine (prezice mereu 0).
+
+Sunt cateva tehnici clasice ca sa previi comportamentul asta:
+
+1.Subsampling - alegi o submultime a setului de antrenare care este balansata intre clase (ceea ce ai facut si tu deja). In exemplul de mai sus arunci 80% din datele de train - toate din clasa 0. Din cate ai observat, ajuta, dar in acelasi timp pierzi din datele de train si asta poate sa duca mai repede la overfit daca antrenezi un model cu multi parametrii.
+
+2.Oversampling - poti sa adaugi duplicate in setul de train pentru clasele minoritare ca sa obtii un set balansat. Alta varianta e sa ai un DataLoader care selecteaza exemple din fiecare clasa cu probabilitati egale (se poate implementa destul de usor in Pytorch, dar nu stiu daca poti sa faci ceva similar cu sklearn). Optiunea asta are avantajul ca nu pierzi din date.
+
+3.Class weights - acorzi o 'importanta' mai mare exemplelor din clasele minoritare. Practic, inmultesti loss-ul unui exemplu de antrenare cu un factor (weight) care este invers proportional cu numarul de exemple din clasa din care face parte. In exemplul de mai sus, daca pui un weight de 9 pentru clasa 1, ai 'balansa' intr-un fel loss-ul intre clase (daca prezice mereu 0 sau mereu 1 ai avea acelasi loss). Daca folosesti sklearn, probabil vei gasi un parametru de class_weights (sau un nume similar la modele). Pentru Pytorch, functiile de loss au si ele optiunea de a adauga weight-uri per clasa. 
+
+Astea ar fi cele mai simple metode. Pentru un boost de performanta poti apoi sa mai adaugi augmentari de date de exemplu, sau sa construiesti ansamble de modele.
